@@ -21,11 +21,13 @@ interface RepositoryInterface
 {
     public function all();
 
-    public function find(string $id);
+    public function findById(string $id): null|object;
 
     public function create(object $entity):void;
 
     public function update(string $id,object $entity):void;
 
     public function delete(string $id);
+
+    public function query(): Builder;
 }

@@ -6,7 +6,36 @@
 
 namespace Domains\User\Services;
 
-class UserService
-{
+use App\Models\User;
+use Domains\User\Entities\UserEntity;
+use Domains\User\Repositories\UserRepository;
+use Illuminate\Support\Collection;
 
+final readonly class UserService
+{
+    public function __construct(
+        private UserRepository $userRepository
+    ) {}
+
+    /**
+     * @return Collection<UserEntity>
+     */
+    public function all(): Collection
+    {
+        //map over user and turn them into user entities
+        return $this->userRepository->all()->map(
+            callback: fn(User $user): UserEntity => UserEntity::fromEloquent(
+                user: $user
+            )
+        );
+    }
+
+    public function findByEmail(string $email): ?UserEntity
+    {
+        return UserEntity::fromEloquent(
+            $this->userRepository->query()
+                ->where('email', $email)
+                ->first()
+        );
+    }
 }

@@ -17,17 +17,29 @@ use Throwable;
 
 abstract readonly class Repository implements RepositoryInterface
 {
+    /**
+     * @param  DatabaseManager  $database
+     * @param  Builder  $query
+     */
     public function __construct(
         private DatabaseManager $database,
         private Builder $query,
     ) {}
 
+    /**
+     * @return Collection
+     */
     public function all(): Collection
     {
         return $this->query->get();
     }
 
-    public function find(string $id)
+    /**
+     * @param  string  $id
+     *
+     * @return object|Collection|\Illuminate\Database\Eloquent\Model|null
+     */
+    public function findById(string $id) : null|object
     {
         return $this->query->findOrFail(
             id : $id
@@ -72,6 +84,11 @@ abstract readonly class Repository implements RepositoryInterface
         }
     }
 
+    /**
+     * @param  string  $id
+     *
+     * @return void
+     */
     public function delete(string $id): void
     {
         try {
@@ -86,5 +103,13 @@ abstract readonly class Repository implements RepositoryInterface
         }catch (Throwable $e){
             throw new QueryException($id, $e);
         }
+    }
+
+    /**
+     * @return Builder
+     */
+    public function query(): Builder
+    {
+        return $this->query;
     }
 }

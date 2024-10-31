@@ -10,7 +10,4 @@ namespace Domains\User\Repositories;
 
 use Infrastructure\Repositories\Repository;
 
-final readonly class UserRepository extends Repository
-{
-
-}
+final readonly class UserRepository extends Repository{}
